@@ -1,4 +1,4 @@
-##Настройка SSL соединения Alfresco
+##Настройка SSL соединения Alfresco через прокси (NGINX)
 Для использования защищенного соединения при работе с Alfresco, а также:
 
 *Доступу по 443 порту
@@ -34,8 +34,8 @@ server {
 server {
     listen 443;
     server_name 192.168.1.100;  //Указывается ip адрес или имя сервера, на котором работает Alfresco
-    ssl_certificate /etc/nginx/keys/rakot.pem;
-    ssl_certificate_key /etc/nginx/keys/rakot.key.pem;
+    ssl_certificate /etc/nginx/keys/rakot.pem; //Ссылка на сертификат в формате PEM
+    ssl_certificate_key /etc/nginx/keys/rakot.key.pem; //Ссылка на ключ в формате PEM
     ssl on;
     ssl_session_cache builtin:1000 shared:SSL:10m;
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
@@ -55,4 +55,29 @@ server {
     }
   }
 
+```
+3) Теперь необходимо отредактировать настройки Alfresco. Для этого необходимо отредактировать файл 
+```
+path_to_alfresco/tomcat/shared/classes/alfresco-global.properties
+```
+Отредактируйте следующие параметры:
+```
+alfresco.host=192.168.1.100 		 //Укажите ip адрес или имя сервера, на котором работает Alfresco
+alfresco.port=8443	        		 //Укажите 8443 порт
+alfresco.protocol=https	    		 //Укажите https
+
+share.context=share
+share.host=192.168.1.100			 //Укажите ip адрес или имя сервера, на котором работает Alfresco
+share.port=8443						 //Укажите 8443 порт
+share.protocol=https				 //Укажите https
+```
+4) Перезагрузите Alfresco командой:
+```
+sh path_to_alfresco/alfresco.sh stop
+//Дождитесь выполнения предыдущей команды после этого
+sh path_to_alfresco/alfresco.sh start
+```
+5) Перезагрузите NGINX
+```
+service nginx restart
 ```
