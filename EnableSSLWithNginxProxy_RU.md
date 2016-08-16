@@ -1,10 +1,10 @@
-##Настройка SSL соединения Alfresco
-Для использования защищенного соединения при работе с Alfresco, а также:
-*Доступу по 443 порту
-*Редиректу с HTTP на HTTPS
-*Редиректу с HOSTNAME на HOSTNAME/alfresco/share
-Необходимо сделать следующие шаги:
-1) Установить NGINX
+##РќР°СЃС‚СЂРѕР№РєР° SSL СЃРѕРµРґРёРЅРµРЅРёСЏ Alfresco
+Р”Р»СЏ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ Р·Р°С‰РёС‰РµРЅРЅРѕРіРѕ СЃРѕРµРґРёРЅРµРЅРёСЏ РїСЂРё СЂР°Р±РѕС‚Рµ СЃ Alfresco, Р° С‚Р°РєР¶Рµ:
+*Р”РѕСЃС‚СѓРїСѓ РїРѕ 443 РїРѕСЂС‚Сѓ
+*Р РµРґРёСЂРµРєС‚Сѓ СЃ HTTP РЅР° HTTPS
+*Р РµРґРёСЂРµРєС‚Сѓ СЃ HOSTNAME РЅР° HOSTNAME/alfresco/share
+РќРµРѕР±С…РѕРґРёРјРѕ СЃРґРµР»Р°С‚СЊ СЃР»РµРґСѓСЋС‰РёРµ С€Р°РіРё:
+1) РЈСЃС‚Р°РЅРѕРІРёС‚СЊ NGINX
 ```
 server {
     listen 80;
@@ -26,7 +26,7 @@ server {
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
       proxy_set_header X-Forwarded-Proto $scheme;
-      # Fix the “It appears that your reverse proxy set up is broken" error.
+      # Fix the вЂњIt appears that your reverse proxy set up is broken" error.
       proxy_pass https://localhost:8443;
       proxy_read_timeout 90;
       proxy_redirect https://localhost:8443 https://192.168.1.100:8443;
