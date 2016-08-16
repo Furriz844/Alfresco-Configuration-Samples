@@ -15,18 +15,25 @@
 ```
 sudo apt-get install nginx
 ```
-Для RedHat путь немного длиннее. Для начала нам нужно создать файл 
+Для RedHat: 
 ```
 yum install nginx
 ```
+2) В моем примере для настройки SSL соединения я использую базовую конфигурацию NGINX, которая содержится в файле:
 ```
-server {
+/etc/nginx/sites-available/default 	Для Ubuntu
+/etc/nginx/conf.d/default.conf		Для RedHat
+```
+Очистите данный файл и впишите в него следующую конфигурацию.
+```
+//Слушаем 80 порт и делаем редирект на 443
+server { 
     listen 80;
     return 301 https://$host$request_uri;
 }
 server {
     listen 443;
-    server_name 192.168.1.100;
+    server_name 192.168.1.100;  //Указывается ip адрес или имя сервера, на котором работает Alfresco
     ssl_certificate /etc/nginx/keys/rakot.pem;
     ssl_certificate_key /etc/nginx/keys/rakot.key.pem;
     ssl on;
@@ -34,7 +41,8 @@ server {
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     ssl_ciphers HIGH:!aNULL:!eNULL:!EXPORT:!CAMELLIA:!DES:!MD5:!PSK:!RC4;
     ssl_prefer_server_ciphers on;
-    access_log /var/log/nginx/access.log; rewrite ^/$ /share;
+    access_log /var/log/nginx/access.log;
+	rewrite ^/$ /share; //Правило, для того чтобы делать редирект с hostname на hostname/alfresco/share
     location / {
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
@@ -43,7 +51,7 @@ server {
       # Fix the “It appears that your reverse proxy set up is broken" error.
       proxy_pass https://localhost:8443;
       proxy_read_timeout 90;
-      proxy_redirect https://localhost:8443 https://192.168.1.100:8443;
+      proxy_redirect https://localhost:8443 https://192.168.1.100:8443; //Также указываем ip адрес или имя сервера, на котором работает Alfresco
     }
   }
 
