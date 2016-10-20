@@ -33,7 +33,7 @@ server {
 }
 server {
     listen 443;
-    server_name 192.168.1.100;  //Указывается ip адрес или имя сервера, на котором работает Alfresco
+    server_name 192.168.1.100;  //Указывается ip адрес или имя сервера, на котором работает веб интерфейс (Share.war)
     ssl_certificate /etc/nginx/keys/rakot.pem; //Ссылка на сертификат в формате PEM
     ssl_certificate_key /etc/nginx/keys/rakot.key.pem; //Ссылка на ключ в формате PEM
     ssl on;
@@ -42,7 +42,7 @@ server {
     ssl_ciphers HIGH:!aNULL:!eNULL:!EXPORT:!CAMELLIA:!DES:!MD5:!PSK:!RC4;
     ssl_prefer_server_ciphers on;
     access_log /var/log/nginx/access.log;
-	rewrite ^/$ /share; //Правило, для того чтобы делать редирект с hostname на hostname/alfresco/share
+	rewrite ^/$ /share; //Правило, для того чтобы делать редирект с hostname на hostname/share
     location / {
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
@@ -67,7 +67,7 @@ alfresco.port=8443	        		 //Укажите 8443 порт
 alfresco.protocol=https	    		 //Укажите https
 
 share.context=share
-share.host=192.168.1.100			 //Укажите ip адрес или имя сервера, на котором работает Alfresco
+share.host=192.168.1.100			 //Укажите ip адрес или имя сервера, на котором работает веб интерфейс (Share.war)
 share.port=8443						 //Укажите 8443 порт
 share.protocol=https				 //Укажите https
 ```
@@ -81,4 +81,4 @@ sh path_to_alfresco/alfresco.sh start
 ```
 service nginx restart
 ```
-Если все сделано правильно, то при попытке пользователя обратиться к 192.168.1.100 (Адрес или имя сервера), пользователь будет переадресован на https://192.168.1.100/alfresco/share
+Если все сделано правильно, то при попытке пользователя обратиться к 192.168.1.100 (Адрес или имя сервера), пользователь будет переадресован на https://192.168.1.100/share
